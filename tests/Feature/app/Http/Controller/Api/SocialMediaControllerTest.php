@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\app\Http\Controller\Api;
 
+use App\Models\Organization;
 use App\Models\SocialMedia;
 use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
@@ -19,6 +20,7 @@ class SocialMediaControllerTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        Organization::factory()->create();
         $this->user = User::factory()->create();
     }
 

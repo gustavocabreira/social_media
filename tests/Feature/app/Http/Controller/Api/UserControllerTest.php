@@ -20,7 +20,14 @@ class UserControllerTest extends TestCase
         $this->assertDatabaseHas('users', [
             'id' => 1,
             'email' => $payload['email'],
+            'organization_id' => 1,
         ]);
+
+        $this->assertDatabaseHas('organizations', [
+            'id' => 1,
+            'name' => 'Nova Organização',
+        ]);
+
         $response->assertJsonStructure(['access_token']);
     }
 }

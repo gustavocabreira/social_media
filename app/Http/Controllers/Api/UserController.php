@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -14,7 +15,12 @@ class UserController extends Controller
     {
         $payload = $request->only('name', 'email', 'password');
         $payload['password'] = Hash::make($payload['password']);
-        $user = User::create($payload);
+
+        $organization = Organization::create([
+            'name' => 'Nova Organização',
+        ]);
+
+        $user = $organization->users()->create($payload);
 
         $token = $user->createToken('user:login');
 
