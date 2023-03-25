@@ -38,7 +38,7 @@ class OrganizationControllerTest extends TestCase
 
         $payload = [
             'name' => $this->faker->name,
-            'email' => $this->faker->unique()->email(),
+            'email' => $this->faker->email(),
         ];
 
         // Act
@@ -64,7 +64,7 @@ class OrganizationControllerTest extends TestCase
 
         $payload = [
             'name' => $this->faker->name,
-            'email' => $this->faker->unique()->email(),
+            'email' => $this->faker->email(),
         ];
 
         // Act
