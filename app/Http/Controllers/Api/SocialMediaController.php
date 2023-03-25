@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SocialMedia\CreateSocialMediaRequest;
+use App\Http\Requests\SocialMedia\UpdateSocialMediaRequest;
 use App\Models\SocialMedia;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -14,13 +16,9 @@ class SocialMediaController extends Controller
         return response()->json(SocialMedia::orderBy('name')->get(), 200);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(CreateSocialMediaRequest $request): JsonResponse
     {
-        $payload = $request->validate([
-            'name' => ['required'],
-            'icon' => ['required']
-        ]);
-
+        $payload = $request->validated();
         return response()->json(SocialMedia::create($payload), 201);
     }
 
@@ -29,13 +27,9 @@ class SocialMediaController extends Controller
         return response()->json($socialMedia, 200);
     }
 
-    public function update(SocialMedia $socialMedia, Request $request): JsonResponse
+    public function update(SocialMedia $socialMedia, UpdateSocialMediaRequest $request): JsonResponse
     {
-        $payload = $request->validate([
-            'name' => ['sometimes'],
-            'icon' => ['sometimes'],
-            'status' => ['sometimes']
-        ]);
+        $payload = $request->validated();
 
         $socialMedia->fill($payload)->update();
 
