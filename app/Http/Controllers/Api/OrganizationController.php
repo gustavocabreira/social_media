@@ -15,6 +15,13 @@ class OrganizationController extends Controller
 {
     public function storeUser(Request $request): JsonResponse
     {
+        // Check if the user is the organization admin
+        abort_if(
+            boolean: !Auth::user()->hasRole('organization_admin'),
+            code: 403,
+            message: 'You must be an administrator to create a new user.'
+        );
+
         $password = Str::random(16);
 
         $payload = $request->validate([

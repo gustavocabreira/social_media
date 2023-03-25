@@ -17,6 +17,7 @@ class ProfileControllerTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->artisan('db:seed');
         Organization::factory()->create();
         $this->user = User::factory()->create();
         $this->actingAs($this->user);
@@ -24,13 +25,13 @@ class ProfileControllerTest extends TestCase
 
     public function test_it_should_fetch_all_organizations_profiles(): void
     {
-        // arrange
+        // Arrange
         $profile = Profile::factory()->create();
 
-        // act
+        // Act
         $response = $this->get(route('profiles.index'));
 
-        // assert
+        // Assert
         $response->assertOk();
         $response->assertJsonCount(1);
         $this->assertCount(1, $response->json());
@@ -38,15 +39,15 @@ class ProfileControllerTest extends TestCase
 
     public function test_it_should_create_a_new_profile(): void
     {
-        // arrange
+        // Arrange
         $payload = [
             'name' => 'Perfil teste',
         ];
 
-        // act
+        // Act
         $response = $this->postJson(route('profiles.store'), $payload);
 
-        // assert
+        // Assert
         $response->assertCreated();
         $this->assertDatabaseHas('profiles', [
             'id' => 1,
@@ -58,10 +59,10 @@ class ProfileControllerTest extends TestCase
 
     public function test_it_should_find_a_profile(): void
     {
-        // arrange
+        // Arrange
         $profile = Profile::factory()->create();
 
-        // act
+        // Act
         $response = $this->getJson(route('profiles.show', ['profile' => $profile->id]));
 
         // assert
@@ -71,13 +72,13 @@ class ProfileControllerTest extends TestCase
 
     public function test_it_should_update_a_profile(): void
     {
-        // arrange
+        // Arrange
         $profile = Profile::factory()->create();
         $payload = [
             'name' => 'Updated profile',
         ];
 
-        // act
+        // Act
         $response = $this->putJson(route('profiles.update', ['profile' => $profile->id]), $payload);
 
         // assert
@@ -90,10 +91,10 @@ class ProfileControllerTest extends TestCase
 
     public function test_it_should_delete_a_profile(): void
     {
-        // arrange
+        // Arrange
         $profile = Profile::factory()->create();
 
-        // act
+        // Act
         $response = $this->deleteJson(route('profiles.show', ['profile' => $profile->id]));
 
         // assert

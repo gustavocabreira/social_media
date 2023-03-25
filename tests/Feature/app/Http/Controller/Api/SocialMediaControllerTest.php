@@ -20,22 +20,23 @@ class SocialMediaControllerTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->artisan('db:seed');
         Organization::factory()->create();
         $this->user = User::factory()->create();
     }
 
     public function test_it_should_create_a_new_social_media(): void
     {
-        // arrange
+        // Arrange
         $payload = [
             'name' => 'Facebook',
             'icon' => 'facebook'
         ];
 
-        // act
+        // Act
         $response = $this->actingAs($this->user)->postJson(route('social_medias.store'), $payload);
 
-        // assert
+        // Assert
         $response->assertCreated();
         $response->assertJsonStructure(['id', 'name', 'icon', 'created_at', 'updated_at']);
         $this->assertDatabaseHas('social_medias', [
@@ -46,81 +47,81 @@ class SocialMediaControllerTest extends TestCase
 
     public function test_it_should_throw_a_validation_exception_when_providing_an_invalid_payload(): void
     {
-        // assert
+        // Assert
         $this->withoutExceptionHandling();
         $this->expectException(ValidationException::class);
 
-        // arrange
+        // Arrange
         $payload = [
             'name' => null,
             'icon' => null
         ];
 
-        // act
+        // Act
         $this->actingAs($this->user)->postJson(route('social_medias.store'), $payload);
     }
 
     public function test_it_should_throw_an_authentication_exception_when_using_an_unauthenticated_user(): void
     {
-        // assert
+        // Assert
         $this->withoutExceptionHandling();
         $this->expectException(AuthenticationException::class);
 
-        // arrange
+        // Arrange
         $payload = [
             'name' => null,
             'icon' => null
         ];
 
-        // act
+        // Act
         $this->postJson(route('social_medias.store'), $payload);
     }
 
     public function test_it_should_fetch_all_active_social_medias(): void
     {
-        // arrange
+        // Arrange
         SocialMedia::factory()->create();
 
-        // act
+        // Act
         $response = $this->actingAs($this->user)->getJson(route('social_medias.index'));
 
-        // assert
+        // Assert
         $response->assertOk();
         $this->assertCount(1, $response->json());
     }
 
     public function test_it_should_find_a_social_media_by_id(): void
     {
-        // arrange
+        // Arrange
         $socialMedia = SocialMedia::factory()->create();
 
-        // act
+        // Act
         $response = $this->actingAs($this->user)->getJson(route('social_medias.show', ['social_media' => $socialMedia->id]));
 
-        // assert
+        // Assert
         $response->assertOk();
         $response->assertJsonStructure(['id', 'name', 'icon', 'status', 'created_at', 'updated_at']);
     }
 
     public function test_it_should_throw_a_not_found_exception_when_providing_an_invalid_social_media(): void
     {
-        // assert
+        // Assert
         $this->withoutExceptionHandling();
         $this->expectException(ModelNotFoundException::class);
 
-        // act
+        // Act
         $this->actingAs($this->user)->getJson(route('social_medias.show', ['social_media' => -1]));
     }
 
     public function test_it_should_delete_a_social_media(): void
     {
-        // arrange
+        // Arrange
         $socialMedia = SocialMedia::factory()->create();
 
-        // act
+        // Act
         $response = $this->actingAs($this->user)->deleteJson(route('social_medias.destroy', ['social_media' => $socialMedia->id]));
 
-        // assert
+        // Assert
         $response->assertNoContent();
         $this->assertDatabaseMissing('social_medias', [
             'id' => 1
@@ -129,7 +130,7 @@ class SocialMediaControllerTest extends TestCase
 
     public function test_it_should_update_a_social_media(): void
     {
-        // arrange
+        // Arrange
         $socialMedia = SocialMedia::factory()->create();
         $payload = [
             'name' => 'Twitter',
@@ -137,10 +138,10 @@ class SocialMediaControllerTest extends TestCase
             'status' => 0,
         ];
 
-        // act
+        // Act
         $response = $this->actingAs($this->user)->putJson(route('social_medias.update', ['social_media' => $socialMedia->id]), $payload);
 
-        // assert
+        // Assert
         $response->assertNoContent();
         $this->assertDatabaseHas('social_medias', [
             'id' => 1,
