@@ -25,6 +25,8 @@ class UserController extends Controller
 
         $user = $organization->users()->create($payload);
 
+        $user->assignRole('organization_admin');
+
         $token = $user->createToken('user:login');
 
         SendCreatedUserMailJob::dispatch($user);

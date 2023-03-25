@@ -5,7 +5,6 @@ namespace Tests\Feature\app\Http\Controller\Api;
 use App\Jobs\SendCreatedUserMailJob;
 use App\Models\Organization;
 use App\Models\User;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +16,14 @@ use Tests\TestCase;
 class UserControllerTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();
+        $this->artisan('db:seed');
+    }
 
     public function test_it_should_create_a_new_user(): void
     {
@@ -37,8 +44,10 @@ class UserControllerTest extends TestCase
             'id' => 1,
             'name' => 'Nova Organização',
         ]);
-
         $response->assertJsonStructure(['access_token']);
+
+        // Assert that the created user has the organization admin role
+        $this->assertTrue((User::find(1))->hasRole('organization_admin'));
 
         Queue::assertPushed(SendCreatedUserMailJob::class);
     }
