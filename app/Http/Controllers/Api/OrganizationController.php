@@ -17,7 +17,7 @@ class OrganizationController extends Controller
     {
         // Check if the user is the organization admin
         abort_if(
-            boolean: !Auth::user()->hasRole('organization_admin'),
+            boolean: !Auth::user()->can('create user'),
             code: 403,
             message: 'You must be an administrator to create a new user.'
         );

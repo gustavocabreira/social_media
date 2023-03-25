@@ -47,7 +47,7 @@ class UserControllerTest extends TestCase
         $response->assertJsonStructure(['access_token']);
 
         // Assert that the created user has the organization admin role
-        $this->assertTrue((User::find(1))->hasRole('organization_admin'));
+        $this->assertTrue((User::find(1))->can('create user'));
 
         Queue::assertPushed(SendCreatedUserMailJob::class);
     }
