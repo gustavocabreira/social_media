@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Profile\CreateProfileRequest;
+use App\Http\Requests\Profile\UpdateProfileRequest;
 use App\Models\Profile;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
@@ -15,11 +16,9 @@ class ProfileController extends Controller
         return response()->json(Auth::user()->organization->profiles()->with(['user:id,name', 'socialMedia:id,name'])->get(), 200);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(CreateProfileRequest $request): JsonResponse
     {
-        $payload = $request->validate([
-            'name' => ['required'],
-        ]);
+        $payload = $request->validated();
 
         $organization = Auth::user()->organization;
 
@@ -31,11 +30,9 @@ class ProfileController extends Controller
         return response()->json($profile, 200);
     }
 
-    public function update(Profile $profile, Request $request): JsonResponse
+    public function update(Profile $profile, UpdateProfileRequest $request): JsonResponse
     {
-        $payload = $request->validate([
-            'name' => ['sometimes'],
-        ]);
+        $payload = $request->validated();
 
         $profile->fill($payload)->update();
 

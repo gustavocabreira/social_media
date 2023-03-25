@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\CreateUserRequest;
 use App\Jobs\SendCreatedUserMailJob;
 use App\Models\Organization;
 use App\Models\User;
@@ -14,9 +15,9 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function store(Request $request): JsonResponse
+    public function store(CreateUserRequest $request): JsonResponse
     {
-        $payload = $request->only('name', 'email', 'password');
+        $payload = $request->validated();
         $payload['password'] = Hash::make($payload['password']);
 
         $organization = Organization::create([
