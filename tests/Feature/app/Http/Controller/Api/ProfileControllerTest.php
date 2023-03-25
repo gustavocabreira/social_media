@@ -69,7 +69,7 @@ class ProfileControllerTest extends TestCase
         $response->assertJsonStructure(['id', 'name']);
     }
 
-    public function test_it_update_a_profile(): void
+    public function test_it_should_update_a_profile(): void
     {
         // arrange
         $profile = Profile::factory()->create();

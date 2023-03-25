@@ -16,7 +16,6 @@ Route::prefix('v1')->group(function () {
     Route::post('users', [UserController::class, 'store'])->name('users.store');
 
     Route::middleware('auth:sanctum')->group(function () {
-
         Route::apiResource('social_medias', SocialMediaController::class);
         Route::apiResource('profiles', ProfileController::class);
         Route::apiResource('users', UserController::class)->except('store');

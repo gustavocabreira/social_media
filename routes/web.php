@@ -16,3 +16,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('confirm-email', [\App\Http\Controllers\Api\UserController::class, 'confirmEmail'])->name('web.confirm-email');
