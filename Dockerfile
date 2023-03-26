@@ -17,7 +17,7 @@ RUN apt-get update -y && apt-get install -y \
     libjpeg-dev \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
-    libpng-dev 
+    libpng-dev
 
 # Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -44,6 +44,7 @@ RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg \
 
 # Define as permissões de diretório corretas para o Apache
 RUN chown -R www-data:www-data /var/www
+RUN cd /var/www/html/social_media && chmod 777 -R storage/
 
 # Define a porta do Apache
 EXPOSE 80
