@@ -13,7 +13,7 @@ class ProfileController extends Controller
 {
     public function index(): JsonResponse
     {
-        return response()->json(Auth::user()->organization->profiles()->with(['user:id,name', 'socialMedia:id,name'])->get(), 200);
+        return response()->json(Auth::user()->organization->profiles()->with(['user:id,name'])->get(), 200);
     }
 
     public function store(CreateProfileRequest $request): JsonResponse
