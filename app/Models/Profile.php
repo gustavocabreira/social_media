@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Auth;
 
 class Profile extends Model
@@ -38,8 +39,8 @@ class Profile extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function socialMedia(): BelongsTo
+    public function socialMedias(): BelongsToMany
     {
-        return $this->belongsTo(SocialMedia::class);
+        return $this->belongsToMany(SocialMedia::class, 'profiles_social_medias');
     }
 }
